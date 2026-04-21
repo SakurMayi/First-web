@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给我最爱的人</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .message {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .heart {
+            width: 100px;
+            height: 100px;
+            background: #ff4757;
+            position: relative;
+            transform: rotate(-45deg);
+            margin: 30px auto;
+            animation: beat 1.5s infinite;
+            cursor: pointer;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            width: 100px;
+            height: 100px;
+            background: #ff4757;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before {
+            top: -50px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: 50px;
+        }
+
+        @keyframes beat {
+            0% { transform: rotate(-45deg) scale(1); }
+            14% { transform: rotate(-45deg) scale(1.1); }
+            28% { transform: rotate(-45deg) scale(1); }
+            42% { transform: rotate(-45deg) scale(1.1); }
+            70% { transform: rotate(-45deg) scale(1); }
+        }
+
+        .surprise {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .surprise:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .hearts-falling {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart-falling {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff4757;
+            transform: rotate(-45deg);
+            animation: fall linear infinite;
+        }
+
+        .heart-falling::before,
+        .heart-falling::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: #ff4757;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart-falling::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart-falling::after {
+            top: 0;
+            left: 10px;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(-45deg) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(-45deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            color: #333;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .gallery img {
+            width: 100%;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .message {
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-falling" id="heartsFalling"></div>
+    
+    <div class="container">
+        <h1>致我最爱的人</h1>
+        
+        <div class="message">
+            <p>亲爱的，当你看到这个页面时，我想告诉你：</p>
+            <p>你是我生命中最美好的相遇</p>
+            <p>每一个和你在一起的瞬间，都是我最珍贵的回忆</p>
+            <p>你的笑容是我每天最期待的阳光</p>
+            <p>我想和你一起走过所有的春夏秋冬</p>
+            <p>直到永远...</p>
+        </div>
+        
+        <div class="heart" onclick="playHeartAnimation()"></div>
+        
+        <button class="surprise" onclick="openSurprise()">点击查看惊喜</button>
+    </div>
+    
+    <div class="modal" id="surpriseModal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <h2>我的小心意</h2>
+            <p>这是专属于你的浪漫时刻</p>
+            
+            <div class="gallery">
+                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=romantic%20couple%20holding%20hands%20sunset&image_size=square" alt="浪漫时刻1">
+                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=romantic%20dinner%20candlelight&image_size=square" alt="浪漫时刻2">
+                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=heart%20shape%20beach%20sunset&image_size=square" alt="浪漫时刻3">
+                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=romantic%20walk%20in%20park&image_size=square" alt="浪漫时刻4">
+            </div>
+            
+            <p style="margin-top: 20px;">我会一直爱你，直到时间的尽头</p>
+        </div>
+    </div>
+
+    <script>
+        // 创建下落的心形
+        function createFallingHearts() {
+            const container = document.getElementById('heartsFalling');
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart-falling';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                
+                container.appendChild(heart);
+                
+                // 移除已完成动画的心形
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 1000);
+        }
+        
+        // 播放心形动画
+        function playHeartAnimation() {
+            const heart = document.querySelector('.heart');
+            heart.style.animation = 'none';
+            void heart.offsetWidth; // 触发重排
+            heart.style.animation = 'beat 1.5s infinite';
+            
+            // 播放心跳声（如果浏览器支持）
+            try {
+                const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+                audio.play();
+            } catch (e) {
+                // 忽略音频错误
+            }
+        }
+        
+        // 打开惊喜模态框
+        function openSurprise() {
+            document.getElementById('surpriseModal').style.display = 'flex';
+        }
+        
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('surpriseModal').style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('surpriseModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // 页面加载完成后开始创建下落的心形
+        window.onload = function() {
+            createFallingHearts();
+        };
+    </script>
+</body>
+</html>
