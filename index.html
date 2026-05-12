@@ -989,17 +989,16 @@
         }
 
         // ==========================
-        // 终极烟花：拖影 + 爱心 + 震动
+        // 更真实的烟花系统（拖影+闪烁+多类型+文字）
         // ==========================
         let fwCanvas, fwCtx;
         let fireworks = [];
         let particles = [];
+        let textParticles = [];
         let fwAnimation = null;
 
         function vibrateBoom() {
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
+            if (navigator.vibrate) navigator.vibrate(60);
         }
 
         function resizeFireworkCanvas() {
@@ -1008,24 +1007,35 @@
         }
 
         function randomColor() {
-            const colors = ["#ff4d6d", "#ffd166", "#06d6a0", "#4cc9f0", "#a855f7", "#ffffff"];
+            const colors = ["#ff4d6d", "#ffd166", "#06d6a0", "#4cc9f0", "#a855f7", "#ffffff", "#ff8fab", "#ffea00"];
             return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function randomLoveText() {
+            const texts = ["LOVE", "I LOVE YOU", girlName, "FOREVER", "❤️"];
+            return texts[Math.floor(Math.random() * texts.length)];
         }
 
         function Firework(x, y, targetY) {
             this.x = x;
             this.y = y;
             this.targetY = targetY;
-            this.speed = 7 + Math.random() * 4;
+            this.speed = 8 + Math.random() * 4;
             this.color = randomColor();
             this.trail = [];
+            this.sparkTimer = 0;
         }
 
         Firework.prototype.update = function () {
             this.trail.push({ x: this.x, y: this.y });
-            if (this.trail.length > 12) this.trail.shift();
+            if (this.trail.length > 18) this.trail.shift();
 
             this.y -= this.speed;
+
+            this.sparkTimer++;
+            if (this.sparkTimer % 2 === 0) {
+                particles.push(new Particle(this.x, this.y, this.color, (Math.random() - 0.5) * 1.2, (Math.random()) * 1.2, true));
+            }
 
             if (this.y <= this.targetY) {
                 explode(this.x, this.y, this.color);
@@ -1043,51 +1053,55 @@
                 fwCtx.save();
                 fwCtx.globalAlpha = alpha;
                 fwCtx.beginPath();
-                fwCtx.arc(t.x, t.y, 2, 0, Math.PI * 2);
+                fwCtx.arc(t.x, t.y, 2.2, 0, Math.PI * 2);
                 fwCtx.fillStyle = this.color;
                 fwCtx.fill();
                 fwCtx.restore();
             }
 
             fwCtx.beginPath();
-            fwCtx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+            fwCtx.arc(this.x, this.y, 3.2, 0, Math.PI * 2);
             fwCtx.fillStyle = "#ffffff";
             fwCtx.fill();
         }
 
-        function Particle(x, y, color, vx, vy) {
+        function Particle(x, y, color, vx, vy, isTrail = false) {
             this.x = x;
             this.y = y;
             this.color = color;
-            this.radius = 2 + Math.random() * 2;
+            this.radius = isTrail ? 1.5 : (2 + Math.random() * 2.5);
             this.speedX = vx;
             this.speedY = vy;
-            this.life = 90 + Math.random() * 30;
+            this.life = isTrail ? 30 : (110 + Math.random() * 40);
             this.alpha = 1;
             this.trail = [];
+            this.flicker = Math.random() * 0.5 + 0.5;
+            this.isTrail = isTrail;
         }
 
         Particle.prototype.update = function () {
             this.trail.push({ x: this.x, y: this.y });
-            if (this.trail.length > 6) this.trail.shift();
+            if (this.trail.length > 10) this.trail.shift();
 
             this.x += this.speedX;
             this.y += this.speedY;
 
-            this.speedY += 0.06;
+            this.speedY += 0.05;
             this.speedX *= 0.985;
             this.speedY *= 0.985;
 
             this.life--;
-            this.alpha = this.life / 120;
 
+            this.alpha = (this.life / 150) * (0.7 + Math.random() * 0.3);
             return this.life > 0;
         }
 
         Particle.prototype.draw = function () {
+            const flick = (Math.random() > 0.85) ? this.flicker : 1;
+
             for (let i = 0; i < this.trail.length; i++) {
                 const t = this.trail[i];
-                const a = (i / this.trail.length) * this.alpha;
+                const a = (i / this.trail.length) * this.alpha * 0.8;
 
                 fwCtx.save();
                 fwCtx.globalAlpha = a;
@@ -1099,48 +1113,132 @@
             }
 
             fwCtx.save();
-            fwCtx.globalAlpha = this.alpha;
+            fwCtx.globalAlpha = this.alpha * flick;
+
+            fwCtx.shadowBlur = this.isTrail ? 10 : 20;
+            fwCtx.shadowColor = this.color;
+
             fwCtx.beginPath();
             fwCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             fwCtx.fillStyle = this.color;
             fwCtx.fill();
+
             fwCtx.restore();
         }
 
-        function explode(x, y, color) {
-            const heartMode = Math.random() > 0.7;
+        function TextBoom(x, y, text) {
+            this.x = x;
+            this.y = y;
+            this.text = text;
+            this.size = 26 + Math.random() * 18;
+            this.alpha = 1;
+            this.life = 90 + Math.random() * 40;
+            this.scale = 1;
+            this.rotate = (Math.random() - 0.5) * 0.3;
+        }
 
-            if (heartMode) {
+        TextBoom.prototype.update = function () {
+            this.life--;
+            this.alpha = this.life / 120;
+            this.scale += 0.012;
+            this.y -= 0.22;
+            return this.life > 0;
+        }
+
+        TextBoom.prototype.draw = function () {
+            fwCtx.save();
+            fwCtx.globalAlpha = this.alpha;
+
+            fwCtx.translate(this.x, this.y);
+            fwCtx.rotate(this.rotate);
+
+            fwCtx.font = `900 ${this.size * this.scale}px Microsoft YaHei`;
+            fwCtx.textAlign = "center";
+            fwCtx.textBaseline = "middle";
+
+            fwCtx.shadowBlur = 30;
+            fwCtx.shadowColor = "rgba(255,255,255,0.95)";
+            fwCtx.fillStyle = "rgba(255, 220, 235, 1)";
+
+            fwCtx.fillText(this.text, 0, 0);
+
+            fwCtx.restore();
+        }
+
+        function createTextBoom(x, y) {
+            const text = randomLoveText();
+            textParticles.push(new TextBoom(x, y, text));
+        }
+
+        function explode(x, y, color) {
+            const r = Math.random();
+
+            if (r > 0.78) {
                 createHeartExplosion(x, y, color);
+            } else if (r > 0.55) {
+                createRingExplosion(x, y, color);
+            } else if (r > 0.30) {
+                createWillowExplosion(x, y, color);
             } else {
-                createNormalExplosion(x, y, color);
+                createChrysanthemumExplosion(x, y, color);
+            }
+
+            if (Math.random() > 0.4) {
+                createTextBoom(x, y);
             }
         }
 
-        function createNormalExplosion(x, y, color) {
-            const count = 70 + Math.random() * 50;
-
+        function createChrysanthemumExplosion(x, y, color) {
+            const count = 160;
             for (let i = 0; i < count; i++) {
-                const angle = Math.random() * Math.PI * 2;
+                const angle = (Math.PI * 2) * (i / count);
                 const speed = 2 + Math.random() * 6;
 
+                particles.push(new Particle(
+                    x, y, color,
+                    Math.cos(angle) * speed,
+                    Math.sin(angle) * speed
+                ));
+            }
+        }
+
+        function createWillowExplosion(x, y, color) {
+            const count = 140;
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 1 + Math.random() * 5;
+
                 const vx = Math.cos(angle) * speed;
-                const vy = Math.sin(angle) * speed;
+                const vy = Math.sin(angle) * speed * 0.7;
+
+                const p = new Particle(x, y, color, vx, vy);
+                p.life = 170 + Math.random() * 60;
+                particles.push(p);
+            }
+        }
+
+        function createRingExplosion(x, y, color) {
+            const count = 120;
+            const baseSpeed = 4 + Math.random() * 2;
+
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2) * (i / count);
+                const vx = Math.cos(angle) * baseSpeed;
+                const vy = Math.sin(angle) * baseSpeed;
 
                 particles.push(new Particle(x, y, color, vx, vy));
             }
         }
 
         function createHeartExplosion(x, y, color) {
-            const count = 120;
-
+            const count = 140;
             for (let i = 0; i < count; i++) {
                 const t = (i / count) * Math.PI * 2;
 
                 const heartX = 16 * Math.pow(Math.sin(t), 3);
                 const heartY = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
 
-                const scale = 0.35 + Math.random() * 0.15;
+                const scale = 0.32 + Math.random() * 0.18;
 
                 const vx = heartX * scale;
                 const vy = heartY * scale;
@@ -1152,15 +1250,17 @@
         function spawnFirework() {
             const x = Math.random() * fwCanvas.width;
             const startY = fwCanvas.height;
-            const targetY = fwCanvas.height * (0.2 + Math.random() * 0.5);
+            const targetY = fwCanvas.height * (0.18 + Math.random() * 0.55);
             fireworks.push(new Firework(x, startY, targetY));
         }
 
         function animateFireworks() {
-            fwCtx.fillStyle = "rgba(0,0,0,0.18)";
+            fwCtx.fillStyle = "rgba(0,0,0,0.16)";
             fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
 
-            if (Math.random() > 0.90) {
+            fwCtx.globalCompositeOperation = "lighter";
+
+            if (Math.random() > 0.88) {
                 spawnFirework();
             }
 
@@ -1176,6 +1276,14 @@
                 return alive;
             });
 
+            textParticles = textParticles.filter(t => {
+                const alive = t.update();
+                t.draw();
+                return alive;
+            });
+
+            fwCtx.globalCompositeOperation = "source-over";
+
             fwAnimation = requestAnimationFrame(animateFireworks);
         }
 
@@ -1189,8 +1297,8 @@
             fwCtx.fillStyle = "black";
             fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
 
-            for (let i = 0; i < 8; i++) {
-                setTimeout(() => spawnFirework(), i * 220);
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => spawnFirework(), i * 200);
             }
 
             animateFireworks();
@@ -1200,11 +1308,9 @@
             cancelAnimationFrame(fwAnimation);
             fireworks = [];
             particles = [];
+            textParticles = [];
         }
 
-        // ==========================
-        // 终极惊喜按钮
-        // ==========================
         function openFinalLove() {
             document.getElementById("finalLove").style.display = "block";
             startFireworks();
@@ -1214,7 +1320,6 @@
             document.getElementById("finalLove").style.display = "none";
             stopFireworks();
         }
-
     </script>
 
 </body>
