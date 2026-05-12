@@ -16,77 +16,345 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #ffdde1, #ee9ca7);
             overflow-x: hidden;
+            background: radial-gradient(circle at top, #1b1f3a, #05060a);
             color: #fff;
+            position: relative;
         }
 
-        /* 漂浮爱心 */
-        .heart {
+        /* 星空背景 */
+        .stars {
             position: fixed;
-            width: 18px;
-            height: 18px;
-            background: rgba(255, 255, 255, 0.85);
-            transform: rotate(45deg);
-            animation: floatUp 8s linear infinite;
-            border-radius: 4px;
+            inset: 0;
             z-index: 0;
+            overflow: hidden;
         }
 
-        .heart::before,
-        .heart::after {
-            content: "";
+        .star {
             position: absolute;
-            width: 18px;
-            height: 18px;
-            background: rgba(255, 255, 255, 0.85);
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle 3s infinite ease-in-out;
         }
 
-        .heart::before {
-            top: -9px;
-            left: 0;
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
 
-        .heart::after {
-            left: -9px;
-            top: 0;
+        /* 流星 */
+        .meteor {
+            position: fixed;
+            width: 220px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+            opacity: 0.85;
+            transform: rotate(-35deg);
+            z-index: 1;
+            animation: meteorMove 1.2s linear forwards;
         }
 
-        @keyframes floatUp {
+        @keyframes meteorMove {
             0% {
-                transform: translateY(110vh) rotate(45deg);
+                transform: translate(-20vw, -20vh) rotate(-35deg);
                 opacity: 1;
             }
 
             100% {
-                transform: translateY(-10vh) rotate(45deg);
+                transform: translate(120vw, 120vh) rotate(-35deg);
                 opacity: 0;
             }
+        }
+
+        /* 主体容器 */
+        .container {
+            position: relative;
+            z-index: 5;
+            max-width: 950px;
+            margin: auto;
+            padding: 30px 16px 90px;
+            text-align: center;
+        }
+
+        /* 她名字动态艺术字 */
+        .name-title {
+            font-size: 52px;
+            font-weight: 900;
+            margin-top: 15px;
+            background: linear-gradient(90deg, #ff4d6d, #ffd6e0, #6ee7ff);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glowMove 4s infinite linear;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes glowMove {
+            0% {
+                background-position: 0%;
+            }
+
+            100% {
+                background-position: 300%;
+            }
+        }
+
+        .subtitle {
+            font-size: 15px;
+            opacity: 0.92;
+            margin-top: 10px;
+            line-height: 1.7;
+        }
+
+        /* 卡片 */
+        .card {
+            margin-top: 22px;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.20);
+            border-radius: 22px;
+            padding: 22px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
+        }
+
+        /* 恋爱天数心跳 */
+        .love-days-title {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .heart-beat {
+            display: inline-block;
+            color: #ff4d6d;
+            animation: heartbeat 1.2s infinite;
+            margin-left: 6px;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            20% {
+                transform: scale(1.3);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+
+            60% {
+                transform: scale(1.25);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .count-box {
+            min-width: 85px;
+            padding: 14px 12px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .count-num {
+            font-size: 28px;
+            font-weight: 900;
+            text-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
+        }
+
+        .count-label {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* 打字机 */
+        .typing {
+            font-size: 16px;
+            line-height: 1.85;
+            white-space: pre-line;
+            text-align: left;
+            min-height: 120px;
+        }
+
+        /* 按钮 */
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .small-btn {
+            padding: 12px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.16);
+            color: white;
+            transition: 0.2s;
+            font-size: 15px;
+        }
+
+        .small-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.30);
+        }
+
+        /* 相册翻页（带纸张纹理） */
+        .book-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 18px;
+        }
+
+        .book {
+            width: 320px;
+            height: 420px;
+            position: relative;
+            perspective: 1500px;
+        }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: left;
+            transform-style: preserve-3d;
+            transition: transform 0.9s ease;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .page img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* 纸张纹理效果 */
+        .page::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E");
+            opacity: 0.25;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+        }
+
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .book-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        /* 弹窗 */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            padding: 18px;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 560px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(14px);
+            border-radius: 22px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.35);
+            position: relative;
+        }
+
+        .modal-content h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .modal-content p {
+            font-size: 15px;
+            line-height: 1.75;
+            white-space: pre-line;
+        }
+
+        .close {
+            position: absolute;
+            right: 16px;
+            top: 12px;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.85;
+        }
+
+        .close:hover {
+            opacity: 1;
         }
 
         /* 锁屏 */
         .lock-screen {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.72);
+            background: rgba(0, 0, 0, 0.78);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            z-index: 999999;
             padding: 18px;
         }
 
         .lock-card {
             width: 100%;
             max-width: 420px;
-            background: rgba(255, 255, 255, 0.14);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(14px);
             border-radius: 22px;
             padding: 28px;
             text-align: center;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
         }
 
         .lock-card h2 {
@@ -136,251 +404,163 @@
             color: #ffd6e0;
         }
 
-        /* 主体 */
-        .container {
-            position: relative;
-            z-index: 10;
-            padding: 30px 16px 80px;
-            max-width: 950px;
-            margin: auto;
-            text-align: center;
-        }
-
-        .title {
-            font-size: 34px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.55);
-        }
-
-        .subtitle {
-            font-size: 16px;
-            opacity: 0.95;
-            margin-bottom: 22px;
-            line-height: 1.6;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(12px);
-            border-radius: 22px;
-            padding: 22px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
-            margin-bottom: 22px;
-        }
-
-        /* 纪念日倒计时 */
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-
-        .count-box {
-            min-width: 80px;
-            padding: 14px 12px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.22);
-        }
-
-        .count-num {
-            font-size: 26px;
-            font-weight: bold;
-        }
-
-        .count-label {
-            font-size: 13px;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-
-        /* 打字机 */
-        .typing {
-            font-size: 16px;
-            line-height: 1.8;
-            min-height: 120px;
-            white-space: pre-line;
-            text-align: left;
-        }
-
-        /* 按钮组 */
-        .button-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 12px;
-            margin-top: 18px;
-        }
-
-        .small-btn {
-            padding: 12px;
-            border-radius: 16px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            background: rgba(255, 255, 255, 0.22);
-            color: white;
-            transition: 0.2s;
-            font-size: 15px;
-        }
-
-        .small-btn:hover {
-            transform: scale(1.04);
-            background: rgba(255, 255, 255, 0.36);
-        }
-
-        /* 相册翻页 Book */
-        .book-wrap {
-            display: flex;
-            justify-content: center;
-            margin-top: 18px;
-        }
-
-        .book {
-            width: 320px;
-            height: 420px;
-            position: relative;
-            perspective: 1500px;
-        }
-
-        .page {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            transform-origin: left;
-            transform-style: preserve-3d;
-            transition: transform 0.9s ease;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
-        }
-
-        .page img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .page.flipped {
-            transform: rotateY(-180deg);
-        }
-
-        .page::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.06);
-        }
-
-        .book-controls {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 14px;
-        }
-
-        /* 弹窗 */
-        .modal {
+        /* 信封动画层 */
+        .envelope-screen {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.65);
+            background: rgba(0, 0, 0, 0.85);
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 99999;
-            padding: 18px;
+            z-index: 999998;
+            flex-direction: column;
         }
 
-        .modal-content {
-            width: 100%;
-            max-width: 540px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(12px);
-            border-radius: 22px;
-            padding: 22px;
-            text-align: center;
-            box-shadow: 0 0 35px rgba(0, 0, 0, 0.3);
+        .envelope {
+            width: 280px;
+            height: 180px;
             position: relative;
+            background: #ff4d6d;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
         }
 
-        .modal-content h3 {
-            font-size: 22px;
-            margin-bottom: 12px;
-        }
-
-        .modal-content p {
-            font-size: 15px;
-            line-height: 1.75;
-            white-space: pre-line;
-        }
-
-        .close {
+        .envelope::before {
+            content: "";
             position: absolute;
-            right: 16px;
-            top: 12px;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0.85;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            inset: 0;
         }
 
-        .close:hover {
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: #ff2d55;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: 1s;
+        }
+
+        .letter {
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            bottom: 10px;
+            height: 0px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            transition: 1.2s;
+            overflow: hidden;
+            color: #333;
+            padding: 0px 14px;
+        }
+
+        .letter p {
+            margin-top: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0;
+            transition: 0.8s;
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope.open .letter {
+            height: 130px;
+            padding: 10px 14px;
+        }
+
+        .envelope.open .letter p {
             opacity: 1;
         }
 
-        /* 音乐按钮 */
-        .music-btn {
-            position: fixed;
-            right: 14px;
-            bottom: 14px;
-            background: rgba(255, 255, 255, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            padding: 12px 16px;
-            border-radius: 999px;
-            color: white;
-            cursor: pointer;
-            z-index: 9999;
-            font-weight: bold;
-            backdrop-filter: blur(8px);
+        .envelope-tip {
+            margin-top: 18px;
             font-size: 14px;
+            opacity: 0.9;
         }
 
-        /* 最终告白 */
+        /* 点击屏幕开始音乐提示 */
+        .tap-layer {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999997;
+        }
+
+        .tap-text {
+            padding: 14px 22px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
+        }
+
+        /* 终极惊喜（全屏烟花舞台） */
         .final-love {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.72);
-            z-index: 999999;
+            z-index: 9999999;
+            background: radial-gradient(circle at top, #0b1d46, #02020a);
+            overflow: hidden;
+        }
+
+        #fireworkCanvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .final-text {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             text-align: center;
             padding: 20px;
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(2px);
         }
 
-        .final-love h1 {
-            font-size: 56px;
-            text-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
-            margin-bottom: 10px;
+        .final-text h1 {
+            font-size: 64px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.9),
+                0 0 50px rgba(255, 77, 109, 0.7);
         }
 
-        .final-love p {
+        .final-text p {
+            margin-top: 16px;
             font-size: 18px;
             opacity: 0.95;
-            margin-top: 10px;
             line-height: 1.6;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
-        .final-love button {
+        .final-text button {
             margin-top: 22px;
-            padding: 12px 20px;
+            padding: 12px 22px;
             border-radius: 14px;
             border: none;
             cursor: pointer;
@@ -388,16 +568,13 @@
             background: #ff4d6d;
             color: white;
             font-size: 16px;
+            box-shadow: 0 0 20px rgba(255, 77, 109, 0.45);
         }
 
         /* 手机优化 */
         @media(max-width: 480px) {
-            .title {
-                font-size: 28px;
-            }
-
-            .subtitle {
-                font-size: 14px;
+            .name-title {
+                font-size: 40px;
             }
 
             .book {
@@ -405,8 +582,8 @@
                 height: 380px;
             }
 
-            .final-love h1 {
-                font-size: 42px;
+            .final-text h1 {
+                font-size: 46px;
             }
         }
     </style>
@@ -414,17 +591,34 @@
 
 <body>
 
-    <!-- 背景音乐：放在 assets/bgm.mp3 -->
+    <!-- 星空 -->
+    <div class="stars" id="stars"></div>
+
+    <!-- 背景音乐 -->
     <audio id="bgm" loop>
         <source src="assets/bgm.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- 你的录音：放在 assets/voice.mp3 -->
+    <!-- 录音 -->
     <audio id="voice">
         <source src="assets/voice.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="music-btn" onclick="toggleMusic()">🎵 开启音乐</div>
+    <!-- 音乐自动播放失败提示 -->
+    <div class="tap-layer" id="tapLayer">
+        <div class="tap-text">轻触屏幕开始 🎵</div>
+    </div>
+
+    <!-- 信封动画 -->
+    <div class="envelope-screen" id="envelopeScreen">
+        <div class="envelope" id="envelope">
+            <div class="flap"></div>
+            <div class="letter">
+                <p id="letterText">宝贝，生日快乐 ❤️<br />我为你准备了一份小礼物...</p>
+            </div>
+        </div>
+        <div class="envelope-tip">信封正在打开…✨</div>
+    </div>
 
     <!-- 锁屏 -->
     <div class="lock-screen" id="lockScreen">
@@ -441,16 +635,17 @@
 
     <!-- 主内容 -->
     <div class="container">
-        <h1 class="title" id="mainTitle">生日快乐，我的宝贝 ❤️</h1>
+        <div class="name-title" id="girlName">To：我的宝贝</div>
         <div class="subtitle">
-            这是我偷偷给你做的一个小世界。<br />
-            点开每一个按钮，你会发现不同的惊喜 ✨
+            今天是属于你的日子。<br />
+            我希望你永远快乐，永远被偏爱。
         </div>
 
-        <!-- 纪念日倒计时 -->
+        <!-- 恋爱计时 -->
         <div class="card">
-            <h2 style="margin-bottom: 8px;">⏳ 我们在一起已经</h2>
-            <div style="opacity:0.95;font-size:14px;">从纪念日开始，每一秒我都更喜欢你一点。</div>
+            <div class="love-days-title">
+                我们在一起已经 <span class="heart-beat">❤️</span>
+            </div>
 
             <div class="countdown">
                 <div class="count-box">
@@ -472,7 +667,7 @@
             </div>
         </div>
 
-        <!-- 打字机 -->
+        <!-- 打字机 + 按钮 -->
         <div class="card">
             <div class="typing" id="typingText"></div>
 
@@ -488,7 +683,7 @@
         <!-- 相册翻页 -->
         <div class="card">
             <h2 style="margin-bottom: 8px;">📖 我们的相册</h2>
-            <div style="opacity:0.92;font-size:14px;">点击“下一页”，像翻书一样看我们的回忆。</div>
+            <div style="opacity:0.92;font-size:14px;">像翻书一样，把回忆翻出来。</div>
 
             <div class="book-wrap">
                 <div class="book" id="book">
@@ -508,11 +703,11 @@
         </div>
 
         <div class="card">
-            <h2 style="margin-bottom: 10px;">🌸 最后</h2>
-            <p style="line-height: 1.8; font-size: 15px; opacity: 0.95;">
-                希望你永远被爱包围，永远闪闪发光。<br />
+            <h2 style="margin-bottom: 10px;">🌙 最后想说</h2>
+            <p style="line-height: 1.85; font-size: 15px; opacity: 0.95;">
+                希望你每一年都比上一年更快乐。<br />
                 我会一直一直陪着你。<br />
-                生日快乐，我的女孩 ❤️
+                生日快乐，我最爱的人 ❤️
             </p>
         </div>
     </div>
@@ -526,82 +721,127 @@
         </div>
     </div>
 
-    <!-- 终极惊喜界面 -->
+    <!-- 终极惊喜：全屏烟花舞台 -->
     <div class="final-love" id="finalLove">
-        <h1>我爱你 ❤️</h1>
-        <p>
-            不是今天才爱你。<br />
-            是每天都更爱你一点。<br />
-            生日快乐，我的宝贝。
-        </p>
-        <button onclick="closeFinalLove()">返回继续拆礼物 🎁</button>
+        <canvas id="fireworkCanvas"></canvas>
+
+        <div class="final-text">
+            <h1>我爱你 ❤️</h1>
+            <p>
+                不是今天才爱你。<br />
+                是每天都更爱你一点。<br />
+                生日快乐，我的宝贝。
+            </p>
+            <button onclick="closeFinalLove()">返回继续拆礼物 🎁</button>
+        </div>
     </div>
 
     <script>
         // ==========================
-        // 必须修改：生日 + 纪念日
+        // 你必须修改（3个）
         // ==========================
-        const correctBirthday = "2002-06-18"; // 她的生日
-        const anniversaryDate = new Date("2023-10-01 00:00:00"); // 恋爱纪念日
+        const girlName = "张某某"; // 她的名字
+        const correctBirthday = "2002-06-18"; // 她生日
+        const anniversaryDate = new Date("2023-10-01 00:00:00"); // 纪念日
 
         // ==========================
         // 内容可修改
         // ==========================
         const loveLetter = `
-亲爱的：
+亲爱的 ${girlName}：
 
-生日快乐🎂
+生日快乐 🎂
 
-我想对你说，
-你的出现让我明白：
-原来喜欢一个人可以这么坚定。
+我真的很喜欢你。
+喜欢你笑的时候，
+喜欢你撒娇的时候，
+喜欢你认真努力的样子。
 
-你笑的时候我会心动，
-你委屈的时候我会心疼，
-你开心的时候我会觉得全世界都很好。
-
-愿你永远被爱包围，
-愿你永远做自己。
+谢谢你出现在我的生命里。
+未来我想牵着你的手，
+走过很多很多年。
 
 我爱你 ❤️
     `;
 
         const secretWords = `
-我有一个秘密。
+你知道吗？
 
-我其实每天都会想你，
-想跟你分享所有小事，
-想把你抱进怀里说：
-“辛苦啦，我在。”
+你的一句话，
+能让我开心一整天。
 
-你真的很重要。
+你不在的时候我会想你，
+你在的时候我又会更想你。
+
+你是我的例外，
+也是我的偏爱。
     `;
 
         const promiseWords = `
-我想和你一起做很多事：
+我想和你一起：
 
 一起旅行 ✈️
 一起看海 🌊
 一起看雪 ❄️
 一起吃好多好吃的 🍰
-一起吵架又和好 😂
-一起慢慢变老 👩‍❤️‍👨
+一起做彼此的依靠 🫶
 
-未来每个生日，
+未来的每一个生日，
 我都想陪你过。
     `;
 
         const typingMessage = `今天是你的生日🎂
-所以我偷偷给你准备了一个小世界。
+所以我偷偷给你做了一个网页。
 
-这里有：
-我们的回忆 📖
-我想对你说的话 💌
-还有我想给你的未来 ✨
+这里有星空✨
+有我们的回忆📖
+有我想对你说的话💌
+还有我想给你的未来❤️
 
-现在开始拆礼物吧～🎁`;
+现在，开始拆礼物吧～🎁`;
 
-        // 打字机效果
+        // ==========================
+        // 初始化名字艺术字 + 信封文字
+        // ==========================
+        document.getElementById("girlName").innerText = "To：" + girlName + " ❤️";
+        document.getElementById("letterText").innerHTML = girlName + "，生日快乐 ❤️<br/>我为你准备了一份小礼物...";
+
+        // ==========================
+        // 星空生成
+        // ==========================
+        function createStars() {
+            const stars = document.getElementById("stars");
+            for (let i = 0; i < 140; i++) {
+                const s = document.createElement("div");
+                s.className = "star";
+                s.style.left = Math.random() * 100 + "vw";
+                s.style.top = Math.random() * 100 + "vh";
+                s.style.opacity = Math.random();
+                s.style.animationDuration = (2 + Math.random() * 4) + "s";
+                stars.appendChild(s);
+            }
+        }
+        createStars();
+
+        // ==========================
+        // 流星随机出现
+        // ==========================
+        function createMeteor() {
+            const m = document.createElement("div");
+            m.className = "meteor";
+            m.style.left = Math.random() * 50 + "vw";
+            m.style.top = Math.random() * 30 + "vh";
+            document.body.appendChild(m);
+            setTimeout(() => m.remove(), 1500);
+        }
+
+        setInterval(() => {
+            if (Math.random() > 0.55) createMeteor();
+        }, 1200);
+
+        // ==========================
+        // 打字机
+        // ==========================
         function startTyping() {
             const el = document.getElementById("typingText");
             el.innerHTML = "";
@@ -613,23 +853,70 @@
             }, 55);
         }
 
-        // 生日验证
+        // ==========================
+        // 自动播放音乐（无按钮）
+        // ==========================
+        function autoPlayMusic() {
+            const bgm = document.getElementById("bgm");
+            bgm.volume = 0.7;
+
+            bgm.play().then(() => {
+                document.getElementById("tapLayer").style.display = "none";
+            }).catch(() => {
+                document.getElementById("tapLayer").style.display = "flex";
+            });
+        }
+
+        document.addEventListener("click", function () {
+            const bgm = document.getElementById("bgm");
+            if (bgm.paused) {
+                bgm.play().then(() => {
+                    document.getElementById("tapLayer").style.display = "none";
+                });
+            }
+        });
+
+        // ==========================
+        // 生日验证 + 信封动画
+        // ==========================
         function checkBirthday() {
             const input = document.getElementById("birthdayInput").value.trim();
             const hint = document.getElementById("hint");
 
             if (input === correctBirthday) {
-                document.getElementById("lockScreen").style.display = "none";
                 hint.innerText = "";
-                startTyping();
-                playMusic();
+
+                document.getElementById("lockScreen").style.display = "none";
+                openEnvelopeAnimation();
+
+                autoPlayMusic();
                 startCountdown();
+
+                setTimeout(() => startTyping(), 1200);
+
             } else {
                 hint.innerText = "❌ 不对哦，再想想～";
             }
         }
 
+        function openEnvelopeAnimation() {
+            const screen = document.getElementById("envelopeScreen");
+            const envelope = document.getElementById("envelope");
+
+            screen.style.display = "flex";
+
+            setTimeout(() => {
+                envelope.classList.add("open");
+            }, 400);
+
+            setTimeout(() => {
+                screen.style.display = "none";
+            }, 2500);
+        }
+
+        // ==========================
         // 弹窗
+        // ==========================
         function showModal(title, content) {
             document.getElementById("modalTitle").innerText = title;
             document.getElementById("modalBody").innerText = content;
@@ -640,30 +927,9 @@
             document.getElementById("modal").style.display = "none";
         }
 
-        // 背景音乐
-        let playing = false;
-        function playMusic() {
-            const bgm = document.getElementById("bgm");
-            bgm.play().then(() => {
-                playing = true;
-                document.querySelector(".music-btn").innerText = "⏸ 暂停音乐";
-            }).catch(() => {
-                document.querySelector(".music-btn").innerText = "🎵 点击开启音乐";
-            });
-        }
-
-        function toggleMusic() {
-            const bgm = document.getElementById("bgm");
-            if (!playing) {
-                playMusic();
-            } else {
-                bgm.pause();
-                playing = false;
-                document.querySelector(".music-btn").innerText = "🎵 开启音乐";
-            }
-        }
-
+        // ==========================
         // 播放录音
+        // ==========================
         function playVoice() {
             const voice = document.getElementById("voice");
             voice.play().catch(() => {
@@ -671,24 +937,10 @@
             });
         }
 
-        // 漂浮爱心
-        function createHeart() {
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = (6 + Math.random() * 5) + "s";
-            heart.style.opacity = Math.random();
-            heart.style.transform = "rotate(45deg) scale(" + (0.6 + Math.random()) + ")";
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 10000);
-        }
-        setInterval(createHeart, 280);
-
         // ==========================
-        // 恋爱纪念日倒计时（动态）
+        // 恋爱计时
         // ==========================
         let countdownTimer = null;
-
         function startCountdown() {
             if (countdownTimer) return;
 
@@ -709,7 +961,7 @@
         }
 
         // ==========================
-        // 相册翻页 Book
+        // 相册翻页
         // ==========================
         const pages = [
             document.getElementById("page1"),
@@ -737,43 +989,234 @@
         }
 
         // ==========================
-        // 终极惊喜：全屏我爱你 + 烟花
+        // 终极烟花：拖影 + 爱心 + 震动
+        // ==========================
+        let fwCanvas, fwCtx;
+        let fireworks = [];
+        let particles = [];
+        let fwAnimation = null;
+
+        function vibrateBoom() {
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        function resizeFireworkCanvas() {
+            fwCanvas.width = window.innerWidth;
+            fwCanvas.height = window.innerHeight;
+        }
+
+        function randomColor() {
+            const colors = ["#ff4d6d", "#ffd166", "#06d6a0", "#4cc9f0", "#a855f7", "#ffffff"];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function Firework(x, y, targetY) {
+            this.x = x;
+            this.y = y;
+            this.targetY = targetY;
+            this.speed = 7 + Math.random() * 4;
+            this.color = randomColor();
+            this.trail = [];
+        }
+
+        Firework.prototype.update = function () {
+            this.trail.push({ x: this.x, y: this.y });
+            if (this.trail.length > 12) this.trail.shift();
+
+            this.y -= this.speed;
+
+            if (this.y <= this.targetY) {
+                explode(this.x, this.y, this.color);
+                vibrateBoom();
+                return false;
+            }
+            return true;
+        }
+
+        Firework.prototype.draw = function () {
+            for (let i = 0; i < this.trail.length; i++) {
+                const t = this.trail[i];
+                const alpha = i / this.trail.length;
+
+                fwCtx.save();
+                fwCtx.globalAlpha = alpha;
+                fwCtx.beginPath();
+                fwCtx.arc(t.x, t.y, 2, 0, Math.PI * 2);
+                fwCtx.fillStyle = this.color;
+                fwCtx.fill();
+                fwCtx.restore();
+            }
+
+            fwCtx.beginPath();
+            fwCtx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+            fwCtx.fillStyle = "#ffffff";
+            fwCtx.fill();
+        }
+
+        function Particle(x, y, color, vx, vy) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.radius = 2 + Math.random() * 2;
+            this.speedX = vx;
+            this.speedY = vy;
+            this.life = 90 + Math.random() * 30;
+            this.alpha = 1;
+            this.trail = [];
+        }
+
+        Particle.prototype.update = function () {
+            this.trail.push({ x: this.x, y: this.y });
+            if (this.trail.length > 6) this.trail.shift();
+
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            this.speedY += 0.06;
+            this.speedX *= 0.985;
+            this.speedY *= 0.985;
+
+            this.life--;
+            this.alpha = this.life / 120;
+
+            return this.life > 0;
+        }
+
+        Particle.prototype.draw = function () {
+            for (let i = 0; i < this.trail.length; i++) {
+                const t = this.trail[i];
+                const a = (i / this.trail.length) * this.alpha;
+
+                fwCtx.save();
+                fwCtx.globalAlpha = a;
+                fwCtx.beginPath();
+                fwCtx.arc(t.x, t.y, this.radius, 0, Math.PI * 2);
+                fwCtx.fillStyle = this.color;
+                fwCtx.fill();
+                fwCtx.restore();
+            }
+
+            fwCtx.save();
+            fwCtx.globalAlpha = this.alpha;
+            fwCtx.beginPath();
+            fwCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            fwCtx.fillStyle = this.color;
+            fwCtx.fill();
+            fwCtx.restore();
+        }
+
+        function explode(x, y, color) {
+            const heartMode = Math.random() > 0.7;
+
+            if (heartMode) {
+                createHeartExplosion(x, y, color);
+            } else {
+                createNormalExplosion(x, y, color);
+            }
+        }
+
+        function createNormalExplosion(x, y, color) {
+            const count = 70 + Math.random() * 50;
+
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 2 + Math.random() * 6;
+
+                const vx = Math.cos(angle) * speed;
+                const vy = Math.sin(angle) * speed;
+
+                particles.push(new Particle(x, y, color, vx, vy));
+            }
+        }
+
+        function createHeartExplosion(x, y, color) {
+            const count = 120;
+
+            for (let i = 0; i < count; i++) {
+                const t = (i / count) * Math.PI * 2;
+
+                const heartX = 16 * Math.pow(Math.sin(t), 3);
+                const heartY = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+                const scale = 0.35 + Math.random() * 0.15;
+
+                const vx = heartX * scale;
+                const vy = heartY * scale;
+
+                particles.push(new Particle(x, y, color, vx, vy));
+            }
+        }
+
+        function spawnFirework() {
+            const x = Math.random() * fwCanvas.width;
+            const startY = fwCanvas.height;
+            const targetY = fwCanvas.height * (0.2 + Math.random() * 0.5);
+            fireworks.push(new Firework(x, startY, targetY));
+        }
+
+        function animateFireworks() {
+            fwCtx.fillStyle = "rgba(0,0,0,0.18)";
+            fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+
+            if (Math.random() > 0.90) {
+                spawnFirework();
+            }
+
+            fireworks = fireworks.filter(f => {
+                const alive = f.update();
+                f.draw();
+                return alive;
+            });
+
+            particles = particles.filter(p => {
+                const alive = p.update();
+                p.draw();
+                return alive;
+            });
+
+            fwAnimation = requestAnimationFrame(animateFireworks);
+        }
+
+        function startFireworks() {
+            fwCanvas = document.getElementById("fireworkCanvas");
+            fwCtx = fwCanvas.getContext("2d");
+
+            resizeFireworkCanvas();
+            window.addEventListener("resize", resizeFireworkCanvas);
+
+            fwCtx.fillStyle = "black";
+            fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => spawnFirework(), i * 220);
+            }
+
+            animateFireworks();
+        }
+
+        function stopFireworks() {
+            cancelAnimationFrame(fwAnimation);
+            fireworks = [];
+            particles = [];
+        }
+
+        // ==========================
+        // 终极惊喜按钮
         // ==========================
         function openFinalLove() {
-            document.getElementById("finalLove").style.display = "flex";
-            launchFireworks();
+            document.getElementById("finalLove").style.display = "block";
+            startFireworks();
         }
 
         function closeFinalLove() {
             document.getElementById("finalLove").style.display = "none";
+            stopFireworks();
         }
 
-        function launchFireworks() {
-            for (let i = 0; i < 60; i++) {
-                setTimeout(() => {
-                    const boom = document.createElement("div");
-                    boom.style.position = "fixed";
-                    boom.style.left = Math.random() * 100 + "vw";
-                    boom.style.top = Math.random() * 100 + "vh";
-                    boom.style.width = "10px";
-                    boom.style.height = "10px";
-                    boom.style.borderRadius = "50%";
-                    boom.style.background = "rgba(255,255,255,0.95)";
-                    boom.style.boxShadow = "0 0 35px rgba(255,255,255,0.9)";
-                    boom.style.zIndex = 9999999;
-                    boom.style.transition = "1.1s";
-                    document.body.appendChild(boom);
-
-                    setTimeout(() => {
-                        boom.style.transform = "scale(7)";
-                        boom.style.opacity = "0";
-                    }, 50);
-
-                    setTimeout(() => boom.remove(), 1200);
-                }, i * 70);
-            }
-        }
     </script>
+
 </body>
 
 </html>
