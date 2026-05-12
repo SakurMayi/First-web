@@ -1,337 +1,779 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>给我最爱的人</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>给最爱的你 ❤️</title>
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: white;
+            background: linear-gradient(135deg, #ffdde1, #ee9ca7);
             overflow-x: hidden;
+            color: #fff;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            max-width: 500px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 10;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .message {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
+        /* 漂浮爱心 */
         .heart {
-            width: 100px;
-            height: 100px;
-            background: #ff4757;
-            position: relative;
-            transform: rotate(-45deg);
-            margin: 30px auto;
-            animation: beat 1.5s infinite;
-            cursor: pointer;
+            position: fixed;
+            width: 18px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.85);
+            transform: rotate(45deg);
+            animation: floatUp 8s linear infinite;
+            border-radius: 4px;
+            z-index: 0;
         }
 
         .heart::before,
         .heart::after {
-            content: '';
-            width: 100px;
-            height: 100px;
-            background: #ff4757;
-            border-radius: 50%;
+            content: "";
             position: absolute;
+            width: 18px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 50%;
         }
 
         .heart::before {
-            top: -50px;
+            top: -9px;
             left: 0;
         }
 
         .heart::after {
+            left: -9px;
             top: 0;
-            left: 50px;
         }
 
-        @keyframes beat {
-            0% { transform: rotate(-45deg) scale(1); }
-            14% { transform: rotate(-45deg) scale(1.1); }
-            28% { transform: rotate(-45deg) scale(1); }
-            42% { transform: rotate(-45deg) scale(1.1); }
-            70% { transform: rotate(-45deg) scale(1); }
-        }
-
-        .surprise {
-            margin-top: 30px;
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50px;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-
-        .surprise:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .hearts-falling {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .heart-falling {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #ff4757;
-            transform: rotate(-45deg);
-            animation: fall linear infinite;
-        }
-
-        .heart-falling::before,
-        .heart-falling::after {
-            content: '';
-            width: 20px;
-            height: 20px;
-            background: #ff4757;
-            border-radius: 50%;
-            position: absolute;
-        }
-
-        .heart-falling::before {
-            top: -10px;
-            left: 0;
-        }
-
-        .heart-falling::after {
-            top: 0;
-            left: 10px;
-        }
-
-        @keyframes fall {
+        @keyframes floatUp {
             0% {
-                transform: translateY(-100px) rotate(-45deg) scale(0.5);
+                transform: translateY(110vh) rotate(45deg);
                 opacity: 1;
             }
+
             100% {
-                transform: translateY(100vh) rotate(-45deg) scale(0.5);
+                transform: translateY(-10vh) rotate(45deg);
                 opacity: 0;
             }
         }
 
-        .modal {
-            display: none;
+        /* 锁屏 */
+        .lock-screen {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.72);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 18px;
+        }
+
+        .lock-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            padding: 28px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .lock-card h2 {
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .lock-card p {
+            opacity: 0.9;
+            font-size: 14px;
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .lock-card input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            background: #ff4d6d;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.03);
+            background: #ff2d55;
+        }
+
+        .hint {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #ffd6e0;
+        }
+
+        /* 主体 */
+        .container {
+            position: relative;
+            z-index: 10;
+            padding: 30px 16px 80px;
+            max-width: 950px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 34px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.55);
+        }
+
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 22px;
+            line-height: 1.6;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            margin-bottom: 22px;
+        }
+
+        /* 纪念日倒计时 */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .count-box {
+            min-width: 80px;
+            padding: 14px 12px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+        }
+
+        .count-num {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .count-label {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* 打字机 */
+        .typing {
+            font-size: 16px;
+            line-height: 1.8;
+            min-height: 120px;
+            white-space: pre-line;
+            text-align: left;
+        }
+
+        /* 按钮组 */
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .small-btn {
+            padding: 12px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.22);
+            color: white;
+            transition: 0.2s;
+            font-size: 15px;
+        }
+
+        .small-btn:hover {
+            transform: scale(1.04);
+            background: rgba(255, 255, 255, 0.36);
+        }
+
+        /* 相册翻页 Book */
+        .book-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 18px;
+        }
+
+        .book {
+            width: 320px;
+            height: 420px;
+            position: relative;
+            perspective: 1500px;
+        }
+
+        .page {
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 100;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: left;
+            transform-style: preserve-3d;
+            transition: transform 0.9s ease;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .page img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .page::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .book-controls {
+            display: flex;
             justify-content: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        /* 弹窗 */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
             align-items: center;
-            backdrop-filter: blur(5px);
+            justify-content: center;
+            z-index: 99999;
+            padding: 18px;
         }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 90%;
-            width: 400px;
+            width: 100%;
+            max-width: 540px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            padding: 22px;
             text-align: center;
-            color: #333;
-            animation: fadeIn 0.5s ease;
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.3);
+            position: relative;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+        .modal-content h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .modal-content p {
+            font-size: 15px;
+            line-height: 1.75;
+            white-space: pre-line;
         }
 
         .close {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            right: 16px;
+            top: 12px;
             font-size: 24px;
             cursor: pointer;
+            opacity: 0.85;
+        }
+
+        .close:hover {
+            opacity: 1;
+        }
+
+        /* 音乐按钮 */
+        .music-btn {
+            position: fixed;
+            right: 14px;
+            bottom: 14px;
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            padding: 12px 16px;
+            border-radius: 999px;
             color: white;
+            cursor: pointer;
+            z-index: 9999;
+            font-weight: bold;
+            backdrop-filter: blur(8px);
+            font-size: 14px;
         }
 
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 20px 0;
+        /* 最终告白 */
+        .final-love {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.72);
+            z-index: 999999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
         }
 
-        .gallery img {
-            width: 100%;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
+        .final-love h1 {
+            font-size: 56px;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
         }
 
-        .gallery img:hover {
-            transform: scale(1.05);
+        .final-love p {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-top: 10px;
+            line-height: 1.6;
         }
 
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2rem;
+        .final-love button {
+            margin-top: 22px;
+            padding: 12px 20px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            background: #ff4d6d;
+            color: white;
+            font-size: 16px;
+        }
+
+        /* 手机优化 */
+        @media(max-width: 480px) {
+            .title {
+                font-size: 28px;
             }
-            
-            .message {
-                font-size: 1rem;
+
+            .subtitle {
+                font-size: 14px;
             }
-            
-            .container {
-                padding: 20px;
+
+            .book {
+                width: 280px;
+                height: 380px;
+            }
+
+            .final-love h1 {
+                font-size: 42px;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="hearts-falling" id="heartsFalling"></div>
-    
-    <div class="container">
-        <h1>致我最爱的人</h1>
-        
-        <div class="message">
-            <p>亲爱的，当你看到这个页面时，我想告诉你：</p>
-            <p>你是我生命中最美好的相遇</p>
-            <p>每一个和你在一起的瞬间，都是我最珍贵的回忆</p>
-            <p>你的笑容是我每天最期待的阳光</p>
-            <p>我想和你一起走过所有的春夏秋冬</p>
-            <p>直到永远...</p>
-        </div>
-        
-        <div class="heart" onclick="playHeartAnimation()"></div>
-        
-        <button class="surprise" onclick="openSurprise()">点击查看惊喜</button>
-    </div>
-    
-    <div class="modal" id="surpriseModal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div class="modal-content">
-            <h2>我的小心意</h2>
-            <p>我离不开你<p>
-            <p style="margin-top: 20px;">我会一直爱你，直到时间的尽头</p>
+
+    <!-- 背景音乐：放在 assets/bgm.mp3 -->
+    <audio id="bgm" loop>
+        <source src="assets/bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 你的录音：放在 assets/voice.mp3 -->
+    <audio id="voice">
+        <source src="assets/voice.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-btn" onclick="toggleMusic()">🎵 开启音乐</div>
+
+    <!-- 锁屏 -->
+    <div class="lock-screen" id="lockScreen">
+        <div class="lock-card">
+            <h2>💌 专属生日贺卡</h2>
+            <p>请输入你的生日（格式：YYYY-MM-DD）才能打开礼物 🎂</p>
+
+            <input id="birthdayInput" type="text" placeholder="例如：2002-06-18" />
+            <button class="btn" onclick="checkBirthday()">打开礼物 🎁</button>
+
+            <div class="hint" id="hint"></div>
         </div>
     </div>
 
+    <!-- 主内容 -->
+    <div class="container">
+        <h1 class="title" id="mainTitle">生日快乐，我的宝贝 ❤️</h1>
+        <div class="subtitle">
+            这是我偷偷给你做的一个小世界。<br />
+            点开每一个按钮，你会发现不同的惊喜 ✨
+        </div>
+
+        <!-- 纪念日倒计时 -->
+        <div class="card">
+            <h2 style="margin-bottom: 8px;">⏳ 我们在一起已经</h2>
+            <div style="opacity:0.95;font-size:14px;">从纪念日开始，每一秒我都更喜欢你一点。</div>
+
+            <div class="countdown">
+                <div class="count-box">
+                    <div class="count-num" id="days">0</div>
+                    <div class="count-label">天</div>
+                </div>
+                <div class="count-box">
+                    <div class="count-num" id="hours">0</div>
+                    <div class="count-label">小时</div>
+                </div>
+                <div class="count-box">
+                    <div class="count-num" id="minutes">0</div>
+                    <div class="count-label">分钟</div>
+                </div>
+                <div class="count-box">
+                    <div class="count-num" id="seconds">0</div>
+                    <div class="count-label">秒</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 打字机 -->
+        <div class="card">
+            <div class="typing" id="typingText"></div>
+
+            <div class="button-group">
+                <button class="small-btn" onclick="showModal('情书💌', loveLetter)">情书💌</button>
+                <button class="small-btn" onclick="playVoice()">听我说🎙️</button>
+                <button class="small-btn" onclick="showModal('秘密告白🌙', secretWords)">秘密告白🌙</button>
+                <button class="small-btn" onclick="showModal('未来约定✨', promiseWords)">未来约定✨</button>
+                <button class="small-btn" onclick="openFinalLove()">终极惊喜❤️</button>
+            </div>
+        </div>
+
+        <!-- 相册翻页 -->
+        <div class="card">
+            <h2 style="margin-bottom: 8px;">📖 我们的相册</h2>
+            <div style="opacity:0.92;font-size:14px;">点击“下一页”，像翻书一样看我们的回忆。</div>
+
+            <div class="book-wrap">
+                <div class="book" id="book">
+                    <div class="page" id="page6" style="z-index: 1;"><img src="assets/photo6.jpg"></div>
+                    <div class="page" id="page5" style="z-index: 2;"><img src="assets/photo5.jpg"></div>
+                    <div class="page" id="page4" style="z-index: 3;"><img src="assets/photo4.jpg"></div>
+                    <div class="page" id="page3" style="z-index: 4;"><img src="assets/photo3.jpg"></div>
+                    <div class="page" id="page2" style="z-index: 5;"><img src="assets/photo2.jpg"></div>
+                    <div class="page" id="page1" style="z-index: 6;"><img src="assets/photo1.jpg"></div>
+                </div>
+            </div>
+
+            <div class="book-controls">
+                <button class="small-btn" onclick="prevPage()">⬅ 上一页</button>
+                <button class="small-btn" onclick="nextPage()">下一页 ➡</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 10px;">🌸 最后</h2>
+            <p style="line-height: 1.8; font-size: 15px; opacity: 0.95;">
+                希望你永远被爱包围，永远闪闪发光。<br />
+                我会一直一直陪着你。<br />
+                生日快乐，我的女孩 ❤️
+            </p>
+        </div>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="close" onclick="closeModal()">✖</div>
+            <h3 id="modalTitle"></h3>
+            <p id="modalBody"></p>
+        </div>
+    </div>
+
+    <!-- 终极惊喜界面 -->
+    <div class="final-love" id="finalLove">
+        <h1>我爱你 ❤️</h1>
+        <p>
+            不是今天才爱你。<br />
+            是每天都更爱你一点。<br />
+            生日快乐，我的宝贝。
+        </p>
+        <button onclick="closeFinalLove()">返回继续拆礼物 🎁</button>
+    </div>
+
     <script>
-        // 创建下落的心形
-        function createFallingHearts() {
-            const container = document.getElementById('heartsFalling');
-            
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.className = 'heart-falling';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                heart.style.animationDelay = Math.random() * 2 + 's';
-                
-                container.appendChild(heart);
-                
-                // 移除已完成动画的心形
-                setTimeout(() => {
-                    heart.remove();
-                }, 5000);
+        // ==========================
+        // 必须修改：生日 + 纪念日
+        // ==========================
+        const correctBirthday = "2002-06-18"; // 她的生日
+        const anniversaryDate = new Date("2023-10-01 00:00:00"); // 恋爱纪念日
+
+        // ==========================
+        // 内容可修改
+        // ==========================
+        const loveLetter = `
+亲爱的：
+
+生日快乐🎂
+
+我想对你说，
+你的出现让我明白：
+原来喜欢一个人可以这么坚定。
+
+你笑的时候我会心动，
+你委屈的时候我会心疼，
+你开心的时候我会觉得全世界都很好。
+
+愿你永远被爱包围，
+愿你永远做自己。
+
+我爱你 ❤️
+    `;
+
+        const secretWords = `
+我有一个秘密。
+
+我其实每天都会想你，
+想跟你分享所有小事，
+想把你抱进怀里说：
+“辛苦啦，我在。”
+
+你真的很重要。
+    `;
+
+        const promiseWords = `
+我想和你一起做很多事：
+
+一起旅行 ✈️
+一起看海 🌊
+一起看雪 ❄️
+一起吃好多好吃的 🍰
+一起吵架又和好 😂
+一起慢慢变老 👩‍❤️‍👨
+
+未来每个生日，
+我都想陪你过。
+    `;
+
+        const typingMessage = `今天是你的生日🎂
+所以我偷偷给你准备了一个小世界。
+
+这里有：
+我们的回忆 📖
+我想对你说的话 💌
+还有我想给你的未来 ✨
+
+现在开始拆礼物吧～🎁`;
+
+        // 打字机效果
+        function startTyping() {
+            const el = document.getElementById("typingText");
+            el.innerHTML = "";
+            let i = 0;
+            const timer = setInterval(() => {
+                el.innerHTML += typingMessage[i];
+                i++;
+                if (i >= typingMessage.length) clearInterval(timer);
+            }, 55);
+        }
+
+        // 生日验证
+        function checkBirthday() {
+            const input = document.getElementById("birthdayInput").value.trim();
+            const hint = document.getElementById("hint");
+
+            if (input === correctBirthday) {
+                document.getElementById("lockScreen").style.display = "none";
+                hint.innerText = "";
+                startTyping();
+                playMusic();
+                startCountdown();
+            } else {
+                hint.innerText = "❌ 不对哦，再想想～";
+            }
+        }
+
+        // 弹窗
+        function showModal(title, content) {
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalBody").innerText = content;
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        // 背景音乐
+        let playing = false;
+        function playMusic() {
+            const bgm = document.getElementById("bgm");
+            bgm.play().then(() => {
+                playing = true;
+                document.querySelector(".music-btn").innerText = "⏸ 暂停音乐";
+            }).catch(() => {
+                document.querySelector(".music-btn").innerText = "🎵 点击开启音乐";
+            });
+        }
+
+        function toggleMusic() {
+            const bgm = document.getElementById("bgm");
+            if (!playing) {
+                playMusic();
+            } else {
+                bgm.pause();
+                playing = false;
+                document.querySelector(".music-btn").innerText = "🎵 开启音乐";
+            }
+        }
+
+        // 播放录音
+        function playVoice() {
+            const voice = document.getElementById("voice");
+            voice.play().catch(() => {
+                alert("播放失败，请检查 assets/voice.mp3 是否存在。");
+            });
+        }
+
+        // 漂浮爱心
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (6 + Math.random() * 5) + "s";
+            heart.style.opacity = Math.random();
+            heart.style.transform = "rotate(45deg) scale(" + (0.6 + Math.random()) + ")";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 10000);
+        }
+        setInterval(createHeart, 280);
+
+        // ==========================
+        // 恋爱纪念日倒计时（动态）
+        // ==========================
+        let countdownTimer = null;
+
+        function startCountdown() {
+            if (countdownTimer) return;
+
+            countdownTimer = setInterval(() => {
+                const now = new Date();
+                const diff = now - anniversaryDate;
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                document.getElementById("days").innerText = days;
+                document.getElementById("hours").innerText = hours;
+                document.getElementById("minutes").innerText = minutes;
+                document.getElementById("seconds").innerText = seconds;
             }, 1000);
         }
-        
-        // 播放心形动画
-        function playHeartAnimation() {
-            const heart = document.querySelector('.heart');
-            heart.style.animation = 'none';
-            void heart.offsetWidth; // 触发重排
-            heart.style.animation = 'beat 1.5s infinite';
-            
-            // 播放心跳声（如果浏览器支持）
-            try {
-                const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
-                audio.play();
-            } catch (e) {
-                // 忽略音频错误
+
+        // ==========================
+        // 相册翻页 Book
+        // ==========================
+        const pages = [
+            document.getElementById("page1"),
+            document.getElementById("page2"),
+            document.getElementById("page3"),
+            document.getElementById("page4"),
+            document.getElementById("page5"),
+            document.getElementById("page6")
+        ];
+
+        let currentPage = 0;
+
+        function nextPage() {
+            if (currentPage < pages.length) {
+                pages[currentPage].classList.add("flipped");
+                currentPage++;
             }
         }
-        
-        // 打开惊喜模态框
-        function openSurprise() {
-            document.getElementById('surpriseModal').style.display = 'flex';
-        }
-        
-        // 关闭模态框
-        function closeModal() {
-            document.getElementById('surpriseModal').style.display = 'none';
-        }
-        
-        // 点击模态框外部关闭
-        window.onclick = function(event) {
-            const modal = document.getElementById('surpriseModal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
+
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                pages[currentPage].classList.remove("flipped");
             }
         }
-        
-        // 页面加载完成后开始创建下落的心形
-        window.onload = function() {
-            createFallingHearts();
-        };
+
+        // ==========================
+        // 终极惊喜：全屏我爱你 + 烟花
+        // ==========================
+        function openFinalLove() {
+            document.getElementById("finalLove").style.display = "flex";
+            launchFireworks();
+        }
+
+        function closeFinalLove() {
+            document.getElementById("finalLove").style.display = "none";
+        }
+
+        function launchFireworks() {
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const boom = document.createElement("div");
+                    boom.style.position = "fixed";
+                    boom.style.left = Math.random() * 100 + "vw";
+                    boom.style.top = Math.random() * 100 + "vh";
+                    boom.style.width = "10px";
+                    boom.style.height = "10px";
+                    boom.style.borderRadius = "50%";
+                    boom.style.background = "rgba(255,255,255,0.95)";
+                    boom.style.boxShadow = "0 0 35px rgba(255,255,255,0.9)";
+                    boom.style.zIndex = 9999999;
+                    boom.style.transition = "1.1s";
+                    document.body.appendChild(boom);
+
+                    setTimeout(() => {
+                        boom.style.transform = "scale(7)";
+                        boom.style.opacity = "0";
+                    }, 50);
+
+                    setTimeout(() => boom.remove(), 1200);
+                }, i * 70);
+            }
+        }
     </script>
 </body>
+
 </html>
